@@ -2,7 +2,7 @@
 
 @import "tailwindcss";
 
-@theme {
+:root {
   --font-press-2p: "Press Start 2P", system-ui, sans-serif;
   --font-monoton: "Monoton", sans-serif;
 
@@ -16,7 +16,13 @@
 
 @layer components {
   .container {
-    @apply max-w-lg mx-auto shadow-lg mt-2 mb-2 p-5 transition-all;
+    max-width: 32rem;
+    margin: 0.5rem auto;
+    padding: 1.25rem;
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
 
