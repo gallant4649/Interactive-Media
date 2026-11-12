@@ -7,8 +7,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>
-);`
-
+);`;
 
 import { useRef } from "react";
 import gsap from "gsap";
@@ -104,11 +103,28 @@ function Hero() {
   return (
     <section
       id="home"
-      className="ocean-hero relative flex min-h-screen items-center justify-center overflow-hidden px-6 text-center"
+      className="hero-section relative flex min-h-screen items-center justify-center overflow-hidden px-6 text-center"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(56,184,210,0.15),transparent_55%)]" />
+      {/* Layer 1: Background */}
+      <div className="hero-background absolute inset-0 z-0">
+        <img
+          src="/assets/surface/surface-hero.jpg"
+          alt="Sunlight filtering through the ocean surface"
+          className="h-full w-full object-cover"
+        />
+      </div>
 
-      <div className="relative z-10 mx-auto max-w-5xl">
+      {/* Layer 2: Dark overlay */}
+      <div className="pointer-events-none absolute inset-0 z-10 bg-[#031725]/55" />
+
+      {/* Layer 3: Gradient */}
+      <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-b from-[#061a2b]/35 via-[#061a2b]/20 to-[#061a2b]/95" />
+
+      {/* Layer 4: Sunlight effect */}
+      <div className="hero-light pointer-events-none absolute inset-0 z-30" />
+
+      {/* Layer 5: Main content */}
+      <div className="relative z-40 mx-auto max-w-5xl">
         <p className="hero-label mb-6 text-xs uppercase tracking-[0.5em] text-cyan-200">
           An underwater exploration
         </p>
@@ -118,21 +134,19 @@ function Hero() {
           <span className="block text-cyan-300">DEEP</span>
         </h1>
 
-        <p className="hero-subtitle mx-auto mt-7 max-w-xl text-sm leading-7 text-white/65 md:text-base">
-          Beneath the surface lies a world we barely know.
-          Discover the mysteries hidden within our oceans.
+        <p className="hero-subtitle mx-auto mt-7 max-w-xl text-sm leading-7 text-white/80 md:text-base">
+          Beneath the surface lies a world we barely know. Discover the
+          mysteries hidden within our oceans.
         </p>
-
-        <a
-          href="#sunlight"
-          className="mt-12 inline-flex items-center gap-3 border border-white/30 px-7 py-4 text-xs uppercase tracking-[0.25em] transition hover:border-cyan-300 hover:bg-cyan-300 hover:text-slate-950"
-        >
-          Start exploring <span>↓</span>
-        </a>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.4em] text-white/40">
-        Scroll to descend
+      {/* Scroll Indicator */}
+      <div className="hero-scroll absolute bottom-8 z-40 flex flex-col items-center gap-3">
+        <span className="whitespace-nowrap text-[10px] uppercase tracking-[0.4em] text-white/70">
+          Scroll to descend
+        </span>
+
+        <div className="h-10 w-px bg-gradient-to-b from-cyan-300 to-transparent" />
       </div>
     </section>
   );
@@ -154,9 +168,7 @@ function OceanSection({ section }) {
             {section.title}
           </h2>
 
-          <p className="mt-6 text-lg text-cyan-100/80">
-            {section.subtitle}
-          </p>
+          <p className="mt-6 text-lg text-cyan-100/80">{section.subtitle}</p>
 
           <p className="mt-5 max-w-lg text-sm leading-8 text-white/55">
             {section.description}
@@ -207,29 +219,48 @@ function App() {
         delay: 0.8,
       });
 
-      // Reveal content when entering the viewport
-      gsap.utils.toArray("[data-reveal]", container.current).forEach((element) => {
-        gsap.fromTo(
-          element,
-          {
-            y: 45,
-            autoAlpha: 0,
+      // Background moves with scroll
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.to(".hero-background img", {
+          scale: 1.2,
+          yPercent: 8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".hero-section",
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
           },
-          {
-            y: 0,
-            autoAlpha: 1,
-            duration: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 85%",
-              toggleActions: "play none none reverse",
-            },
-          }
-        );
+        });
       });
 
-      // Scroll progress indicator
+      // Reveal content
+      gsap.utils
+        .toArray("[data-reveal]", container.current)
+        .forEach((element) => {
+          gsap.fromTo(
+            element,
+            {
+              y: 45,
+              autoAlpha: 0,
+            },
+            {
+              y: 0,
+              autoAlpha: 1,
+              duration: 1,
+              ease: "power2.out",
+              scrollTrigger: {
+                trigger: element,
+                start: "top 85%",
+                toggleActions: "play none none reverse",
+              },
+            },
+          );
+        });
+
+      // Scroll progress
       gsap.to(".scroll-progress", {
         scaleX: 1,
         ease: "none",
@@ -241,7 +272,7 @@ function App() {
         },
       });
     },
-    { scope: container }
+    { scope: container },
   );
 
   return (
@@ -263,4 +294,3 @@ function App() {
 }
 
 export default App;
-
