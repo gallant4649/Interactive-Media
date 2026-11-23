@@ -1,15 +1,4 @@
-`import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './routes'; // Otomatis membaca index.jsx di dalam folder routes
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
-);`;
-
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -105,48 +94,125 @@ function Hero() {
       id="home"
       className="hero-section relative flex min-h-screen items-center justify-center overflow-hidden px-6 text-center"
     >
-      {/* Layer 1: Background */}
-      <div className="hero-background absolute inset-0 z-0">
-        <img
-          src="/assets/surface/surface-hero.jpg"
-          alt="Sunlight filtering through the ocean surface"
-          className="h-full w-full object-cover"
-        />
-      </div>
+      {/* Abstract sunlight atmosphere */}
+      <div className="sky-sunlight" aria-hidden="true" />
+      <div className="sky-glow" aria-hidden="true" />
+      <div className="sky-rays" aria-hidden="true" />
 
-      {/* Layer 2: Dark overlay */}
-      <div className="pointer-events-none absolute inset-0 z-10 bg-[#031725]/55" />
-
-      {/* Layer 3: Gradient */}
-      <div className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-b from-[#061a2b]/35 via-[#061a2b]/20 to-[#061a2b]/95" />
-
-      {/* Layer 4: Sunlight effect */}
-      <div className="hero-light pointer-events-none absolute inset-0 z-30" />
-
-      {/* Layer 5: Main content */}
-      <div className="relative z-40 mx-auto max-w-5xl">
-        <p className="hero-label mb-6 text-xs uppercase tracking-[0.5em] text-cyan-200">
+      {/* Main content */}
+      <div className="relative z-10 mx-auto max-w-5xl">
+        <p className="hero-label mb-6 text-xs uppercase tracking-[0.5em] text-[#174B65]/40">
           An underwater exploration
         </p>
 
-        <h1 className="hero-title font-display text-5xl font-extrabold tracking-tight sm:text-7xl md:text-8xl">
+        <h1 className="hero-title font-display text-5xl font-extrabold tracking-tight text-[#123D55] sm:text-7xl md:text-8xl">
           INTO THE
-          <span className="block text-cyan-300">DEEP</span>
+          <span className="block text-white">DEEP</span>
         </h1>
 
-        <p className="hero-subtitle mx-auto mt-7 max-w-xl text-sm leading-7 text-white/80 md:text-base">
+        <p className="hero-subtitle mx-auto mt-7 max-w-xl text-sm leading-7 text-[#174B65]/80 md:text-base">
           Beneath the surface lies a world we barely know. Discover the
           mysteries hidden within our oceans.
         </p>
       </div>
 
       {/* Scroll Indicator */}
-      <div className="hero-scroll absolute bottom-8 z-40 flex flex-col items-center gap-3">
-        <span className="whitespace-nowrap text-[10px] uppercase tracking-[0.4em] text-white/70">
+      <div className="hero-scroll absolute bottom-8 z-10 flex flex-col items-center gap-3">
+        <span className="whitespace-nowrap text-[10px] uppercase tracking-[0.4em] text-white/80">
           Scroll to descend
         </span>
 
-        <div className="h-10 w-px bg-gradient-to-b from-cyan-300 to-transparent" />
+        <div className="h-10 w-px bg-gradient-to-b from-[#174B65]/70 to-transparent" />
+      </div>
+    </section>
+  );
+}
+
+function LearningObjectives() {
+  const objectives = [
+    {
+      number: "01",
+      title: "Identify",
+      description:
+        "Identify the major zones of the ocean based on their depth and light availability.",
+    },
+    {
+      number: "02",
+      title: "Understand",
+      description:
+        "Explain how light, temperature, and pressure change as ocean depth increases.",
+    },
+    {
+      number: "03",
+      title: "Discover",
+      description:
+        "Describe how marine organisms adapt to survive in different deep-sea environments.",
+    },
+  ];
+
+  return (
+    <section
+      id="objectives"
+      className="relative overflow-hidden bg-[#061a2b] px-6 py-28 md:px-20 md:py-40"
+    >
+      {/* Background decoration */}
+      <div className="pointer-events-none absolute -right-40 top-0 h-96 w-96 rounded-full bg-cyan-400/[0.06] blur-[120px]" />
+
+      <div className="relative mx-auto max-w-6xl">
+        {/* Section heading */}
+        <div data-reveal className="mb-16 max-w-2xl">
+          <p className="mb-5 text-[10px] uppercase tracking-[0.45em] text-cyan-300">
+            Before We Descend
+          </p>
+
+          <h2 className="font-display text-4xl font-bold leading-tight md:text-6xl">
+            WHAT WILL
+            <span className="block text-cyan-300">YOU DISCOVER?</span>
+          </h2>
+
+          <p className="mt-6 max-w-lg text-sm leading-8 text-white/50 md:text-base">
+            Before exploring the depths of the ocean, let's understand what we
+            are about to discover.
+          </p>
+        </div>
+
+        {/* Learning objectives */}
+        <div className="grid gap-5 md:grid-cols-3">
+          {objectives.map((objective) => (
+            <article
+              key={objective.number}
+              data-reveal
+              className="group border-t border-white/15 py-8 transition-colors duration-500 hover:border-cyan-300"
+            >
+              <span className="text-xs tracking-[0.3em] text-cyan-300/70">
+                {objective.number}
+              </span>
+
+              <h3 className="mt-8 font-display text-2xl font-semibold text-white transition-colors duration-300 group-hover:text-cyan-300">
+                {objective.title}
+              </h3>
+
+              <p className="mt-4 text-sm leading-7 text-white/50">
+                {objective.description}
+              </p>
+            </article>
+          ))}
+        </div>
+
+        {/* Transition */}
+        {/*<div data-reveal className="mt-24 flex flex-col items-center gap-4">
+          <span className="text-[10px] uppercase tracking-[0.4em] text-white/35">
+            The journey begins below
+          </span>
+
+          <a
+            href="#sunlight"
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-cyan-300/30 text-cyan-300 transition-all duration-300 hover:bg-cyan-300 hover:text-[#061a2b]"
+            aria-label="Explore the ocean zones"
+          >
+            ↓
+          </a>
+        </div>*/}
       </div>
     </section>
   );
@@ -191,6 +257,74 @@ function OceanSection({ section }) {
   );
 }
 
+function WaterCursor() {
+  const glowRef = useRef(null);
+  const rippleRef = useRef(null);
+
+  useEffect(() => {
+    const glow = glowRef.current;
+    const container = rippleRef.current;
+
+    if (!glow || !container) return;
+
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+    if (isTouchDevice) return;
+
+    let lastX = 0;
+    let lastY = 0;
+    let lastTime = 0;
+
+    const handlePointerMove = (event) => {
+      const { clientX: x, clientY: y } = event;
+
+      // Smooth cursor glow
+      glow.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+
+      const now = performance.now();
+      const distance = Math.hypot(x - lastX, y - lastY);
+
+      // Limit ripple frequency
+      if (distance < 38 || now - lastTime < 90) return;
+
+      lastX = x;
+      lastY = y;
+      lastTime = now;
+
+      const ripple = document.createElement("span");
+
+      ripple.className = "water-ripple";
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+
+      container.appendChild(ripple);
+
+      ripple.addEventListener(
+        "animationend",
+        () => {
+          ripple.remove();
+        },
+        { once: true },
+      );
+    };
+
+    window.addEventListener("pointermove", handlePointerMove, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener("pointermove", handlePointerMove);
+    };
+  }, []);
+
+  return (
+    <div className="water-cursor-layer" aria-hidden="true">
+      <div ref={glowRef} className="water-cursor-glow" />
+      <div ref={rippleRef} className="water-ripple-container" />
+    </div>
+  );
+}
+
 function App() {
   const container = useRef(null);
 
@@ -217,23 +351,6 @@ function App() {
         autoAlpha: 0,
         duration: 1,
         delay: 0.8,
-      });
-
-      // Background moves with scroll
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        gsap.to(".hero-background img", {
-          scale: 1.2,
-          yPercent: 8,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".hero-section",
-            start: "top top",
-            end: "bottom top",
-            scrub: 1,
-          },
-        });
       });
 
       // Reveal content
@@ -271,16 +388,64 @@ function App() {
           scrub: true,
         },
       });
+      // Atmospheric descent animation
+      gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+        gsap.to(".sky-sunlight", {
+          opacity: 0,
+          scale: 1.4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".hero-section",
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+
+        gsap.to(".sky-rays", {
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".hero-section",
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+
+        gsap.to(".ocean-ambient-light", {
+          opacity: 0.15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".hero-section",
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      });
     },
     { scope: container },
   );
 
   return (
-    <main ref={container} className="overflow-hidden">
+    <main
+      ref={container}
+      className="ocean-main relative isolate overflow-hidden"
+    >
+      <div className="ocean-atmosphere" aria-hidden="true">
+        <div className="ocean-ambient-light" />
+        <div className="ocean-caustics" />
+      </div>
+
+      {/* Interactive cursor */}
+      <WaterCursor />
+
       <div className="scroll-progress fixed left-0 top-0 z-[60] h-[2px] w-full origin-left scale-x-0 bg-cyan-300" />
 
       <Navbar />
       <Hero />
+      <LearningObjectives />
 
       {sections.map((section) => (
         <OceanSection key={section.id} section={section} />
